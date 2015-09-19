@@ -99,23 +99,6 @@ public class MainActivity extends Activity {
                 postString += c2.isChecked() ? "1" : "0";
                 postString += c3.isChecked() ? "1" : "0";
 
-                RestAdapter restAdapter = new RestAdapter.Builder()
-                        .setLogLevel(RestAdapter.LogLevel.FULL)
-                        .setEndpoint(Globals.CONFIGURL)
-                        .build();
-                APIService apiService = restAdapter.create(APIService.class);
-                apiService.openDrawerTask(new Drawer(postString), new Callback<String>() {
-                    @Override
-                    public void success(String s, Response response) {
-
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.d("JERRY: retrofit error", error.getMessage());
-                    }
-                });
-
              }
         });
 
