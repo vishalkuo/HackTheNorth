@@ -3,4 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="drawer1">Drawer 1</string>
+    <string name="drawer2">Drawer 2</string>
+    <string name="drawer3">Drawer 3</string>
+    <string name="send">Send it away!</string>
 </resources>
