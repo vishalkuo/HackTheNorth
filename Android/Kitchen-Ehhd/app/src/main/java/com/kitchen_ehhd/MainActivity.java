@@ -1,7 +1,9 @@
 package com.kitchen_ehhd;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,24 +39,18 @@ public class MainActivity extends Activity {
                 postString += c2.isChecked() ? "1" : "0";
                 postString += c3.isChecked() ? "1" : "0";
 
-                RestAdapter restAdapter = new RestAdapter.Builder()
-                        .setLogLevel(RestAdapter.LogLevel.FULL)
-                        .setEndpoint(Globals.CONFIGURL)
-                        .build();
-
-                APIService apiService = restAdapter.create(APIService.class);
-
-                apiService.openDrawerTask(postString, new Callback<String>() {
-                    @Override
-                    public void success(String s, Response response) {
-
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
+                new RESTCall(postString).execute();
+//                apiService.openDrawerTask2(new Callback<String>() {
+//                    @Override
+//                    public void success(String s, Response response) {
+//
+//                    }
+//
+//                    @Override
+//                    public void failure(RetrofitError error) {
+//                        Log.d("JERRY: retrofit error", error.getMessage());
+//                    }
+//                });
 
              }
         });
@@ -80,5 +76,26 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class RESTCall extends AsyncTask<Void, Void, Void> {
+        private String req;
+
+        public RESTCall(String req) {
+            this.req = req;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            RestAdapter restAdapter = new RestAdapter.Builder()
+                    .setLogLevel(RestAdapter.LogLevel.FULL)
+                    .setEndpoint(Globals.CONFIGURL)
+                    .build();
+
+            APIService apiService = restAdapter.create(APIService.class);
+
+            apiService.resultList();
+            return null;
+        }
     }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 import retrofit.Callback;
 import retrofit.http.Body;
+import retrofit.http.GET;
 import retrofit.http.POST;
 
 /**
@@ -15,6 +16,9 @@ import retrofit.http.POST;
 public interface APIService {
     @POST("/api/open/")
     void openDrawerTask(@Body String request, Callback<String> taskCallback);
+
+    @GET("/api/test/open/")
+    List<String> resultList();
 }
 
 
