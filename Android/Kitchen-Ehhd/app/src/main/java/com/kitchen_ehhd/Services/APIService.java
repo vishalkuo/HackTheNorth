@@ -13,9 +13,8 @@ import retrofit.http.POST;
  * Created by vishalkuo on 15-09-19.
  */
 public interface APIService {
-    @POST("/api/open/{drawer}")
+    @POST("/api/open/")
     void openDrawerTask(@Body String request, Callback<String> taskCallback);
-
 }
 
 
