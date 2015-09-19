@@ -24,7 +24,7 @@ import com.kitchen_ehhd.VIewAdapters.MapAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Map;
 
 import io.particle.android.sdk.cloud.SparkCloud;
@@ -54,6 +54,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        drawerItems = new ArrayList<>();
+        mapAdapter = new MapAdapter(drawerItems);
+
         final SharedPreferences sharedPreferences = this.getSharedPreferences(getString(R.string.item_list_file_key), Context.MODE_PRIVATE);
         Map<String, ?> keys = sharedPreferences.getAll();
         if(keys != null) {
@@ -82,8 +85,7 @@ public class MainActivity extends Activity {
          * POPULATE LISTVIEW
          */
         itemList = (ListView)findViewById(R.id.search_items);
-        //itemMap = new MockSearchItems().getItemToDrawerMap();
-//        populateListView();
+        populateListView();
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -184,7 +186,6 @@ public class MainActivity extends Activity {
      * LAZY STATIC OBJECTS
      */
     private void populateListView(){
-        mapAdapter = new MapAdapter(drawerItems);
         itemList.setAdapter(mapAdapter);
         itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -211,16 +212,6 @@ public class MainActivity extends Activity {
             }
         });
 
-    }
-
-    private void populateDrawerItems() {
-        drawerItems = new ArrayList<>();
-        drawerItems.add(new DrawerItem("Fork", 1));
-        drawerItems.add(new DrawerItem("Fork 2", 2));
-        drawerItems.add(new DrawerItem("Knife", 3));
-        drawerItems.add(new DrawerItem("Table", 1));
-        drawerItems.add(new DrawerItem("Rain", 2));
-        drawerItems.add(new DrawerItem("Tester", 2));
     }
 
     private void setupSparkCore() throws Exception{

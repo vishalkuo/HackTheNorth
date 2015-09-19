@@ -33,6 +33,8 @@ public class MapAdapter extends BaseAdapter implements Filterable {
 
     public void appendToData(String item, int drawerNum) {
         mapData.add(new DrawerItem(item, drawerNum));
+        viewData.add(new DrawerItem(item, drawerNum));
+        notifyDataSetChanged();
     }
 
     @Override
