@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/api/open', function(req, res, next){
-    res.send(req.body.drawer)
+    res.json(req.body.drawer)
 })
 
 module.exports = router;
