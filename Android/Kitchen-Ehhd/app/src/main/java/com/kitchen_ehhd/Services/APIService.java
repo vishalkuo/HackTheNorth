@@ -1,8 +1,5 @@
 package com.kitchen_ehhd.Services;
 
-import com.kitchen_ehhd.Models.Drawer;
-import com.kitchen_ehhd.Models.ResponseObject;
-
 import java.util.List;
 
 import retrofit.Callback;

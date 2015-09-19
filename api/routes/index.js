@@ -12,10 +12,7 @@ router.post('/api/open', function(req, res, next){
 })
 
 router.get('/api/test/open', function(req, res){
-    myObj = [{
-        test: 1
-    }]
-    res.json(myObj)
+    res.json("Test")
 })
 
 module.exports = router;

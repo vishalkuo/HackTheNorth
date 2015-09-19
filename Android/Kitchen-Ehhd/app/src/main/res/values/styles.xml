@@ -5,4 +5,9 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="search_bar_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">30dp</item>
+    </style>
+
 </resources>
