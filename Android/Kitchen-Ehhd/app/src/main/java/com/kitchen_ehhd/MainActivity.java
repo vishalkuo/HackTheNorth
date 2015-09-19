@@ -1,6 +1,8 @@
 package com.kitchen_ehhd;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -43,14 +45,22 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final SharedPreferences sharedPreferences = this.getSharedPreferences(getString(R.string.item_list_file_key), Context.MODE_PRIVATE);
+        Map<String, ?> keys = sharedPreferences.getAll();
+        if(keys != null) {
+            for(Map.Entry<String,?> entry : keys.entrySet()){
+                Log.d("map values",entry.getKey() + ": " +
+                        entry.getValue().toString());
+                mapAdapter.appendToData(entry.getKey(), Integer.valueOf(entry.getValue().toString()));
+            }
+        }
         setContentView(R.layout.activity_main);
 
         final Button button = (Button) findViewById(R.id.send);
         final Button addButton = (Button) findViewById(R.id.add_item_button);
 
         searchBar = (EditText)findViewById(R.id.search_bar);
-
-        populateDrawerItems();
 
         /**
          * POPULATE LISTVIEW
@@ -100,6 +110,9 @@ public class MainActivity extends Activity {
 
                 if(!itemName.equals("") && !drawerNum.equals("")) {
                     mapAdapter.appendToData(itemName, Integer.valueOf(drawerNum));
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt(itemName, Integer.valueOf(drawerNum));
+                    editor.commit();
                     mapAdapter.notifyDataSetChanged();
                 }
             }
