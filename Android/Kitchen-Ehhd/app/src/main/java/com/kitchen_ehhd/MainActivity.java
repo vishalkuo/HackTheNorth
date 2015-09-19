@@ -7,7 +7,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
+
+import com.kitchen_ehhd.Models.Globals;
+import com.kitchen_ehhd.Services.APIService;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 
 public class MainActivity extends Activity {
 
@@ -22,9 +30,33 @@ public class MainActivity extends Activity {
                 CheckBox c1 = (CheckBox)findViewById(R.id.drawer_1);
                 CheckBox c2 = (CheckBox)findViewById(R.id.drawer_2);
                 CheckBox c3 = (CheckBox)findViewById(R.id.drawer_3);
-                boolean[] checkBoxStates = {c1.isChecked(), c2.isChecked(), c3.isChecked()};
 
-            }
+                String postString = "";
+
+                postString += c1.isChecked() ? "1" : "0";
+                postString += c2.isChecked() ? "1" : "0";
+                postString += c3.isChecked() ? "1" : "0";
+
+                RestAdapter restAdapter = new RestAdapter.Builder()
+                        .setLogLevel(RestAdapter.LogLevel.FULL)
+                        .setEndpoint(Globals.CONFIGURL)
+                        .build();
+
+                APIService apiService = restAdapter.create(APIService.class);
+
+                apiService.openDrawerTask(postString, new Callback<String>() {
+                    @Override
+                    public void success(String s, Response response) {
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+
+             }
         });
     }
 
