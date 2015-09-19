@@ -99,7 +99,7 @@ public class MainActivity extends Activity {
                 String drawerNum = drawerNumText.getText().toString();
 
                 if(!itemName.equals("") && !drawerNum.equals("")) {
-                    itemMap.put(itemName, Integer.valueOf(drawerNum));
+                    mapAdapter.appendToData(itemName, Integer.valueOf(drawerNum));
                     mapAdapter.notifyDataSetChanged();
                 }
             }
