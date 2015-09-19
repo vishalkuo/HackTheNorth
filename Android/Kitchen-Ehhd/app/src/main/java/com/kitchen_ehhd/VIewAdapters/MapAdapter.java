@@ -85,8 +85,8 @@ public class MapAdapter extends BaseAdapter implements Filterable {
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 viewData.clear();
                 viewData.addAll((List<Map.Entry<String, Integer>>) filterResults.values);
-//                Log.d("TEST", String.valueOf(viewData.size()));
                 notifyDataSetChanged();
+
             }
         };
     }

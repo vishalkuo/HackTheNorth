@@ -108,8 +108,8 @@ public class MainActivity extends Activity {
      * LAZY STATIC OBJECTS
      */
     private void populateListView(){
-        MapAdapter adapter = new MapAdapter(itemMap);
-        itemList.setAdapter(adapter);
+        mapAdapter = new MapAdapter(itemMap);
+        itemList.setAdapter(mapAdapter);
         itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -126,6 +126,7 @@ public class MainActivity extends Activity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 MainActivity.this.mapAdapter.getFilter().filter(charSequence);
+
             }
 
             @Override
@@ -145,7 +146,6 @@ public class MainActivity extends Activity {
 
         @Override
         protected Void doInBackground(Void... params) {
-
             return null;
         }
     }
