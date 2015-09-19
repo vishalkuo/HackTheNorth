@@ -11,4 +11,5 @@
     <string name="add_item_hint">Add an Item</string>
     <string name="add_button">Add</string>
     <string name="drawer_number_hint">Drawer #</string>
+    <string name="item_list_file_key">com.kitchen_ehhd</string>
 </resources>
