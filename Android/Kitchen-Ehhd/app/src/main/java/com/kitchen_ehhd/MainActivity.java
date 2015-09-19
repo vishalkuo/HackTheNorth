@@ -3,9 +3,11 @@ package com.kitchen_ehhd;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
@@ -24,6 +26,7 @@ public class MainActivity extends Activity {
     private CheckBox c1;
     private CheckBox c2;
     private CheckBox c3;
+    private Map<String, Integer> itemMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,8 @@ public class MainActivity extends Activity {
         final Button button = (Button) findViewById(R.id.send);
 
         itemList = (ListView)findViewById(R.id.search_items);
+
+        itemMap = new MockSearchItems().getItemToDrawerMap();
 
         populateListView();
         button.setOnClickListener(new View.OnClickListener() {
@@ -82,11 +87,17 @@ public class MainActivity extends Activity {
     }
 
     private void populateListView(){
-        MapAdapter adapter = new MapAdapter(new MockSearchItems().getItemToDrawerMap());
+        MapAdapter adapter = new MapAdapter(itemMap);
         itemList.setAdapter(adapter);
+        itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("LOL", itemMap.keySet().toArray()[i].toString());
+            }
+        });
     }
 
-    private class RESTCall extends AsyncTask<Void, Void, Void> {
+    private class RESTCall extends AsyncTask<Void, Void, Void>{
         private String req;
 
         public RESTCall(String req) {

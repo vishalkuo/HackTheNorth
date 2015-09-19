@@ -1,13 +1,14 @@
 package com.kitchen_ehhd.Models;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * Created by vishalkuo on 15-09-19.
  */
 public class MockSearchItems {
-    private Map<String, Integer> itemToDrawerMap = new HashMap<>();
+    private static Map<String, Integer> itemToDrawerMap = new LinkedHashMap<>();
 
     public MockSearchItems() {
         itemToDrawerMap.put("Fork", 1);
