@@ -3,7 +3,6 @@ package com.kitchen_ehhd;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,13 +10,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 import com.kitchen_ehhd.Models.Globals;
+import com.kitchen_ehhd.Models.MockSearchItems;
 import com.kitchen_ehhd.Services.APIService;
 
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import java.util.Map;
 
+import retrofit.RestAdapter;
 
 public class MainActivity extends Activity {
 
@@ -27,6 +25,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         final Button button = (Button) findViewById(R.id.send);
+        populateListView();
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 CheckBox c1 = (CheckBox)findViewById(R.id.drawer_1);
@@ -76,6 +75,11 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void populateListView(){
+        Map<String, Integer> itemMap = new MockSearchItems().getItemToDrawerMap();
+
     }
 
     private class RESTCall extends AsyncTask<Void, Void, Void> {

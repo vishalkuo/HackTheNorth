@@ -7,4 +7,5 @@
     <string name="drawer2">Drawer 2</string>
     <string name="drawer3">Drawer 3</string>
     <string name="send">Send it away!</string>
+    <string name="search_bar_hint">Search for Items</string>
 </resources>
