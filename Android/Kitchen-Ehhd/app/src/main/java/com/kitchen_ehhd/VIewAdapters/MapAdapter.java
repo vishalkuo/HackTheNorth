@@ -21,18 +21,19 @@ import java.util.Map;
  * Created by vishalkuo on 15-09-19.
  */
 public class MapAdapter extends BaseAdapter implements Filterable {
-    private final ArrayList<DrawerItem> mapData;
-    private final ArrayList<DrawerItem> viewData;
+    private final ArrayList<DrawerItem> mapData = new ArrayList<>();
+    private final ArrayList<DrawerItem> viewData = new ArrayList<>();
 
     public MapAdapter(List<DrawerItem> map) {
-        mapData = (ArrayList<DrawerItem>)map;
-        viewData = (ArrayList<DrawerItem>)map;
+        mapData.addAll(map);
+        viewData.addAll(map);
     }
 
     @Override
     public int getCount() {
         return viewData.size();
     }
+
     public void appendToData(String item, int drawerNum) {
         mapData.add(new DrawerItem(item, drawerNum));
     }
@@ -50,8 +51,6 @@ public class MapAdapter extends BaseAdapter implements Filterable {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         final View endView;
-
-        Log.d("TEST", "" + getCount());
 
         if (view == null){
             endView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_adapter, viewGroup, false);
