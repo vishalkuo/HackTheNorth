@@ -3,6 +3,8 @@ package com.kitchen_ehhd;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.kitchen_ehhd.Models.Globals;
@@ -27,6 +30,8 @@ public class MainActivity extends Activity {
     private CheckBox c2;
     private CheckBox c3;
     private Map<String, Integer> itemMap;
+    private MapAdapter mapAdapter;
+    private EditText searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +40,16 @@ public class MainActivity extends Activity {
 
         final Button button = (Button) findViewById(R.id.send);
 
+        searchBar = (EditText)findViewById(R.id.search_bar);
+
+        /**
+         * POPULATE LISTVIEW
+         */
         itemList = (ListView)findViewById(R.id.search_items);
-
         itemMap = new MockSearchItems().getItemToDrawerMap();
-
+        mapAdapter = new MapAdapter(itemMap);
         populateListView();
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 c1 = (CheckBox)findViewById(R.id.drawer_1);
@@ -86,6 +96,9 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * LAZY STATIC OBJECTS
+     */
     private void populateListView(){
         MapAdapter adapter = new MapAdapter(itemMap);
         itemList.setAdapter(adapter);
@@ -95,6 +108,24 @@ public class MainActivity extends Activity {
                 Log.d("LOL", itemMap.keySet().toArray()[i].toString());
             }
         });
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                MainActivity.this.mapAdapter.getFilter().filter(charSequence);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
     }
 
     private class RESTCall extends AsyncTask<Void, Void, Void>{

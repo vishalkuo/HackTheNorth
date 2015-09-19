@@ -16,6 +16,7 @@ public class MockSearchItems {
         itemToDrawerMap.put("Pepper", 2);
         itemToDrawerMap.put("Salt", 2);
         itemToDrawerMap.put("Tree", 1);
+        itemToDrawerMap.put("Fork 2", 3);
     }
 
     public Map<String, Integer> getItemToDrawerMap() {
