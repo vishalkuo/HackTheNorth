@@ -48,6 +48,7 @@ public class MainActivity extends Activity {
     private ArrayList<DrawerItem> drawerItems;
     private Context c = this;
     private Activity a = (Activity)c;
+    private Button toggleBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,7 @@ public class MainActivity extends Activity {
 
         final Button button = (Button) findViewById(R.id.send);
         final Button addButton = (Button) findViewById(R.id.add_item_button);
+        toggleBtn = (Button)findViewById(R.id.toggleBtn);
 
         searchBar = (EditText)findViewById(R.id.search_bar);
 
@@ -81,7 +83,7 @@ public class MainActivity extends Activity {
          */
         itemList = (ListView)findViewById(R.id.search_items);
         //itemMap = new MockSearchItems().getItemToDrawerMap();
-        populateListView();
+//        populateListView();
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -129,6 +131,34 @@ public class MainActivity extends Activity {
                     editor.commit();
                     mapAdapter.notifyDataSetChanged();
                 }
+            }
+        });
+
+
+        toggleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Async.executeAsync(SparkCloud.get(c), new Async.ApiWork<SparkCloud, Integer>(){
+                    @Override
+                    public Integer callApi(SparkCloud sparkCloud) throws SparkCloudException, IOException {
+                        SparkDevice sparkDevice = sparkCloud.getDevice("3f0025000647343232363230");
+                        try{
+                            sparkDevice.callFunction("turnOn");
+                        }catch(Exception e){
+                            Log.e("ERR", e.getMessage());
+                        }
+                        return 1;
+                    }
+
+                    @Override
+                    public void onSuccess(Integer integer) {
+                    }
+
+                    @Override
+                    public void onFailure(SparkCloudException e) {
+                        Log.d(" ERR",  e.getBestMessage());
+                    }
+                });
             }
         });
     }
@@ -198,9 +228,11 @@ public class MainActivity extends Activity {
             @Override
             public Integer callApi(SparkCloud sparkCloud) throws SparkCloudException, IOException {
                 sparkCloud.logIn(Globals.USERNAME, Globals.PASSWORD);
-                List<SparkDevice> deviceList = sparkCloud.getDevices();
-                for (SparkDevice sparkDevice : deviceList){
-                    Log.d("DEVICE", sparkDevice.getName());
+                SparkDevice sparkDevice = sparkCloud.getDevice("3f0025000647343232363230");
+                try{
+                    sparkDevice.callFunction("turnOn");
+                }catch(Exception e){
+                    Log.e("ERR", e.getMessage());
                 }
                 return 1;
             }
