@@ -8,16 +8,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ListView;
 
 import com.kitchen_ehhd.Models.Globals;
 import com.kitchen_ehhd.Models.MockSearchItems;
 import com.kitchen_ehhd.Services.APIService;
+import com.kitchen_ehhd.VIewAdapters.MapAdapter;
 
 import java.util.Map;
 
 import retrofit.RestAdapter;
 
 public class MainActivity extends Activity {
+    private ListView itemList;
+    private CheckBox c1;
+    private CheckBox c2;
+    private CheckBox c3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +31,15 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         final Button button = (Button) findViewById(R.id.send);
+
+        itemList = (ListView)findViewById(R.id.search_items);
+
         populateListView();
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                CheckBox c1 = (CheckBox)findViewById(R.id.drawer_1);
-                CheckBox c2 = (CheckBox)findViewById(R.id.drawer_2);
-                CheckBox c3 = (CheckBox)findViewById(R.id.drawer_3);
+                c1 = (CheckBox)findViewById(R.id.drawer_1);
+                c2 = (CheckBox)findViewById(R.id.drawer_2);
+                c3 = (CheckBox)findViewById(R.id.drawer_3);
 
                 String postString = "";
 
@@ -69,17 +78,12 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
     private void populateListView(){
-        Map<String, Integer> itemMap = new MockSearchItems().getItemToDrawerMap();
-
+        MapAdapter adapter = new MapAdapter(new MockSearchItems().getItemToDrawerMap());
+        itemList.setAdapter(adapter);
     }
 
     private class RESTCall extends AsyncTask<Void, Void, Void> {
