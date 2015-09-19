@@ -1,7 +1,7 @@
 package com.kitchen_ehhd;
 
 import android.app.Activity;
-import android.os.AsyncTask;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,13 +18,19 @@ import android.widget.ListView;
 import com.kitchen_ehhd.Models.Drawer;
 import com.kitchen_ehhd.Models.DrawerItem;
 import com.kitchen_ehhd.Models.Globals;
-import com.kitchen_ehhd.Models.MockSearchItems;
 import com.kitchen_ehhd.Services.APIService;
 import com.kitchen_ehhd.VIewAdapters.MapAdapter;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import io.particle.android.sdk.cloud.SparkCloud;
+import io.particle.android.sdk.cloud.SparkCloudException;
+import io.particle.android.sdk.cloud.SparkDevice;
+import io.particle.android.sdk.utils.Async;
+import io.particle.android.sdk.utils.Toaster;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -39,11 +45,20 @@ public class MainActivity extends Activity {
     private MapAdapter mapAdapter;
     private EditText searchBar;
     private ArrayList<DrawerItem> drawerItems;
+    private Context c = this;
+    private Activity a = (Activity)c;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        try{
+            setupSparkCore();
+        }catch(Exception e){
+            Log.e("ERR", e.toString());
+        }
+
 
         final Button button = (Button) findViewById(R.id.send);
         final Button addButton = (Button) findViewById(R.id.add_item_button);
@@ -165,16 +180,28 @@ public class MainActivity extends Activity {
         drawerItems.add(new DrawerItem("Rain", 2));
         drawerItems.add(new DrawerItem("Tester", 2));
     }
-    private class RESTCall extends AsyncTask<Void, Void, Void>{
-        private String req;
 
-        public RESTCall(String req) {
-            this.req = req;
-        }
+    private void setupSparkCore() throws Exception{
+        Async.executeAsync(SparkCloud.get(c), new Async.ApiWork<SparkCloud, Integer>(){
+            @Override
+            public Integer callApi(SparkCloud sparkCloud) throws SparkCloudException, IOException {
+                sparkCloud.logIn(Globals.USERNAME, Globals.PASSWORD);
+                List<SparkDevice> deviceList = sparkCloud.getDevices();
+                for (SparkDevice sparkDevice : deviceList){
+                    Log.d("DEVICE", sparkDevice.getName());
+                }
+                return 1;
+            }
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            return null;
-        }
+            @Override
+            public void onSuccess(Integer integer) {
+                Toaster.l(MainActivity.this, "Logged in");
+            }
+
+            @Override
+            public void onFailure(SparkCloudException e) {
+                Log.d(" ERR",  e.getBestMessage());
+            }
+        });
     }
 }
