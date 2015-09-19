@@ -1,5 +1,7 @@
 package com.kitchen_ehhd.Services;
 
+import com.kitchen_ehhd.Models.Drawer;
+
 import java.util.List;
 
 import retrofit.Callback;
@@ -12,7 +14,7 @@ import retrofit.http.POST;
  */
 public interface APIService {
     @POST("/api/open/")
-    void openDrawerTask(@Body String request, Callback<String> taskCallback);
+    void openDrawerTask(@Body Drawer request, Callback<String> taskCallback);
 
     @GET("/api/test/open/")
     List<String> resultList();

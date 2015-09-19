@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 
+import com.kitchen_ehhd.Models.Drawer;
 import com.kitchen_ehhd.Models.Globals;
 import com.kitchen_ehhd.Models.MockSearchItems;
 import com.kitchen_ehhd.Services.APIService;
@@ -19,7 +20,10 @@ import com.kitchen_ehhd.VIewAdapters.MapAdapter;
 
 import java.util.Map;
 
+import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class MainActivity extends Activity {
     private ListView itemList;
@@ -52,18 +56,22 @@ public class MainActivity extends Activity {
                 postString += c2.isChecked() ? "1" : "0";
                 postString += c3.isChecked() ? "1" : "0";
 
-                new RESTCall(postString).execute();
-//                apiService.openDrawerTask2(new Callback<String>() {
-//                    @Override
-//                    public void success(String s, Response response) {
-//
-//                    }
-//
-//                    @Override
-//                    public void failure(RetrofitError error) {
-//                        Log.d("JERRY: retrofit error", error.getMessage());
-//                    }
-//                });
+                RestAdapter restAdapter = new RestAdapter.Builder()
+                        .setLogLevel(RestAdapter.LogLevel.FULL)
+                        .setEndpoint(Globals.CONFIGURL)
+                        .build();
+                APIService apiService = restAdapter.create(APIService.class);
+                apiService.openDrawerTask(new Drawer(postString), new Callback<String>() {
+                    @Override
+                    public void success(String s, Response response) {
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.d("JERRY: retrofit error", error.getMessage());
+                    }
+                });
 
              }
         });
@@ -106,14 +114,7 @@ public class MainActivity extends Activity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            RestAdapter restAdapter = new RestAdapter.Builder()
-                    .setLogLevel(RestAdapter.LogLevel.FULL)
-                    .setEndpoint(Globals.CONFIGURL)
-                    .build();
 
-            APIService apiService = restAdapter.create(APIService.class);
-
-            apiService.resultList();
             return null;
         }
     }
