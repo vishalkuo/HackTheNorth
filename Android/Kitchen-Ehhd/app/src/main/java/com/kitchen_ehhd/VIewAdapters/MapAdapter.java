@@ -9,6 +9,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.kitchen_ehhd.Models.Drawer;
+import com.kitchen_ehhd.Models.DrawerItem;
 import com.kitchen_ehhd.R;
 
 import java.util.ArrayList;
@@ -19,23 +21,24 @@ import java.util.Map;
  * Created by vishalkuo on 15-09-19.
  */
 public class MapAdapter extends BaseAdapter implements Filterable {
-    private final ArrayList<Map.Entry<String, Integer>> mapData;
-    private final ArrayList<Map.Entry<String, Integer>> viewData;
+    private final ArrayList<DrawerItem> mapData;
+    private final ArrayList<DrawerItem> viewData;
 
-    public MapAdapter(Map<String, Integer> map) {
-        mapData = new ArrayList<>();
-        viewData = new ArrayList<>();
-        mapData.addAll(map.entrySet());
-        viewData.addAll(map.entrySet());
+    public MapAdapter(List<DrawerItem> map) {
+        mapData = (ArrayList<DrawerItem>)map;
+        viewData = (ArrayList<DrawerItem>)map;
     }
 
     @Override
     public int getCount() {
         return viewData.size();
     }
+    public void appendToData(String item, int drawerNum) {
+        mapData.add(new DrawerItem(item, drawerNum));
+    }
 
     @Override
-    public Map.Entry<String, Integer> getItem(int i) {
+    public DrawerItem getItem(int i) {
         return viewData.get(i);
     }
 
@@ -56,10 +59,10 @@ public class MapAdapter extends BaseAdapter implements Filterable {
             endView = view;
         }
 
-        Map.Entry<String, Integer> items = getItem(i);
+        DrawerItem items = getItem(i);
 
-        ((TextView)endView.findViewById(R.id.item_name)).setText(items.getKey());
-        ((TextView)endView.findViewById(R.id.drawer_number)).setText(String.valueOf(items.getValue()));
+        ((TextView)endView.findViewById(R.id.item_name)).setText(items.getName());
+        ((TextView)endView.findViewById(R.id.drawer_number)).setText(String.valueOf(items.getDrawerNum()));
 
         return endView;
     }
@@ -69,9 +72,9 @@ public class MapAdapter extends BaseAdapter implements Filterable {
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
-                List<Map.Entry<String, Integer>> filteredList = new ArrayList<>();
-                for (Map.Entry<String, Integer> entry : mapData){
-                    if (entry.getKey().toLowerCase().contains(charSequence.toString().toLowerCase())){
+                List<DrawerItem> filteredList = new ArrayList<>();
+                for (DrawerItem entry : mapData){
+                    if (entry.getName().toLowerCase().contains(charSequence.toString().toLowerCase())){
                         filteredList.add(entry);
                     }
                 }
@@ -84,7 +87,7 @@ public class MapAdapter extends BaseAdapter implements Filterable {
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 viewData.clear();
-                viewData.addAll((List<Map.Entry<String, Integer>>) filterResults.values);
+                viewData.addAll((List<DrawerItem>) filterResults.values);
                 notifyDataSetChanged();
 
             }

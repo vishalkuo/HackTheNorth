@@ -8,4 +8,7 @@
     <string name="drawer3">Drawer 3</string>
     <string name="send">Send it away!</string>
     <string name="search_bar_hint">Search for Items</string>
+    <string name="add_item_hint">Add an Item</string>
+    <string name="add_button">Add</string>
+    <string name="drawer_number_hint">Drawer #</string>
 </resources>

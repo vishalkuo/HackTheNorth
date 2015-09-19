@@ -16,11 +16,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.kitchen_ehhd.Models.Drawer;
+import com.kitchen_ehhd.Models.DrawerItem;
 import com.kitchen_ehhd.Models.Globals;
 import com.kitchen_ehhd.Models.MockSearchItems;
 import com.kitchen_ehhd.Services.APIService;
 import com.kitchen_ehhd.VIewAdapters.MapAdapter;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import retrofit.Callback;
@@ -36,6 +38,7 @@ public class MainActivity extends Activity {
     private Map<String, Integer> itemMap;
     private MapAdapter mapAdapter;
     private EditText searchBar;
+    private ArrayList<DrawerItem> drawerItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +46,17 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         final Button button = (Button) findViewById(R.id.send);
+        final Button addButton = (Button) findViewById(R.id.add_item_button);
 
         searchBar = (EditText)findViewById(R.id.search_bar);
+
+        populateDrawerItems();
 
         /**
          * POPULATE LISTVIEW
          */
         itemList = (ListView)findViewById(R.id.search_items);
-        itemMap = new MockSearchItems().getItemToDrawerMap();
-        mapAdapter = new MapAdapter(itemMap);
+        //itemMap = new MockSearchItems().getItemToDrawerMap();
         populateListView();
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +90,20 @@ public class MainActivity extends Activity {
 
              }
         });
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                EditText addItemText = (EditText)findViewById(R.id.add_item_text);
+                EditText drawerNumText = (EditText)findViewById(R.id.drawer_number);
+                String itemName = addItemText.getText().toString();
+                String drawerNum = drawerNumText.getText().toString();
+
+                if(!itemName.equals("") && !drawerNum.equals("")) {
+                    itemMap.put(itemName, Integer.valueOf(drawerNum));
+                    mapAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     @Override
@@ -108,12 +127,12 @@ public class MainActivity extends Activity {
      * LAZY STATIC OBJECTS
      */
     private void populateListView(){
-        mapAdapter = new MapAdapter(itemMap);
+        mapAdapter = new MapAdapter(drawerItems);
         itemList.setAdapter(mapAdapter);
         itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("LOL", itemMap.keySet().toArray()[i].toString());
+                Log.d("LOL", drawerItems.get(i).getName());
             }
         });
 
@@ -137,6 +156,15 @@ public class MainActivity extends Activity {
 
     }
 
+    private void populateDrawerItems() {
+        drawerItems = new ArrayList<>();
+        drawerItems.add(new DrawerItem("Fork", 1));
+        drawerItems.add(new DrawerItem("Fork 2", 2));
+        drawerItems.add(new DrawerItem("Knife", 3));
+        drawerItems.add(new DrawerItem("Table", 1));
+        drawerItems.add(new DrawerItem("Rain", 2));
+        drawerItems.add(new DrawerItem("Tester", 2));
+    }
     private class RESTCall extends AsyncTask<Void, Void, Void>{
         private String req;
 
