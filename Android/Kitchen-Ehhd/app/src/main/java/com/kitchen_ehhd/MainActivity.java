@@ -170,12 +170,45 @@ public class MainActivity extends Activity {
      */
     private void populateListView(){
         itemList.setAdapter(mapAdapter);
-        itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("LOL", drawerItems.get(i).getName());
-            }
-        });
+       itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+           @Override
+           public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+               final int ii = i;
+               Async.executeAsync(SparkCloud.get(c), new Async.ApiWork<SparkCloud, Integer>() {
+                   @Override
+                   public Integer callApi(SparkCloud sparkCloud) throws SparkCloudException, IOException {
+                       SparkDevice sparkDevice = sparkCloud.getDevice("3f0025000647343232363230");
+                       String methodSuffix = "";
+                       switch(ii){
+                           case(1):
+                               methodSuffix = "One";
+                               break;
+                           case(2):
+                               methodSuffix = "Two";
+                               break;
+                           default:
+                               methodSuffix = "";
+                               break;
+                       }
+                       try {
+                           sparkDevice.callFunction("turnOn" + methodSuffix);
+                       } catch (Exception e) {
+                           Log.e("ERR", e.getMessage());
+                       }
+                       return 1;
+                   }
+
+                   @Override
+                   public void onSuccess(Integer integer) {
+                   }
+
+                   @Override
+                   public void onFailure(SparkCloudException e) {
+                       Log.d(" ERR", e.getBestMessage());
+                   }
+               });
+           }
+       });
 
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
