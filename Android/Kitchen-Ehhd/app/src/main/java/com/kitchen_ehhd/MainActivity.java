@@ -49,6 +49,7 @@ public class MainActivity extends Activity {
     private Context c = this;
     private Activity a = (Activity)c;
     private Button toggleBtn;
+    private ArrayList<DrawerItem> mapData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +62,10 @@ public class MainActivity extends Activity {
         Map<String, ?> keys = sharedPreferences.getAll();
         if(keys != null) {
             for(Map.Entry<String,?> entry : keys.entrySet()){
-                Log.d("map values",entry.getKey() + ": " +
+                Log.d("map values", entry.getKey() + ": " +
                         entry.getValue().toString());
                 mapAdapter.appendToData(entry.getKey(), Integer.valueOf(entry.getValue().toString()));
+                mapData.add(new DrawerItem(entry.getKey(), Integer.valueOf(entry.getValue().toString())));
             }
         }
         setContentView(R.layout.activity_main);
@@ -173,17 +175,20 @@ public class MainActivity extends Activity {
        itemList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               final int ii = i;
+               final DrawerItem drawerItem = mapData.get(i);
                Async.executeAsync(SparkCloud.get(c), new Async.ApiWork<SparkCloud, Integer>() {
                    @Override
                    public Integer callApi(SparkCloud sparkCloud) throws SparkCloudException, IOException {
                        SparkDevice sparkDevice = sparkCloud.getDevice("3f0025000647343232363230");
                        String methodSuffix = "";
-                       switch(ii){
+                       switch(drawerItem.getDrawerNum()){
                            case(1):
-                               methodSuffix = "One";
+                               methodSuffix = "";
                                break;
                            case(2):
+                               methodSuffix = "One";
+                               break;
+                           case(3):
                                methodSuffix = "Two";
                                break;
                            default:
@@ -191,6 +196,7 @@ public class MainActivity extends Activity {
                                break;
                        }
                        try {
+                           Log.d("turn", "turnOn" + methodSuffix);
                            sparkDevice.callFunction("turnOn" + methodSuffix);
                        } catch (Exception e) {
                            Log.e("ERR", e.getMessage());
